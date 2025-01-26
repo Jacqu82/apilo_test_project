@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container text-center">
+        <hr>
+        <h1><a href="{{ path('search_points') }}">Hello World!</a></h1>
+
+        {% for flash_message in app.session.flashBag.get('danger') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error fetching data:</strong> {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+            {{ form_row(form.street) }}
+            {{ form_row(form.city) }}
+            {{ form_row(form.postCode) }}
+            {% if form.name is defined %}
+                {{ form_row(form.name) }}
+            {% endif %}
+            <input type="submit" value="Send" class="btn btn-success"/>
+        {{ form_end(form) }}
+
+        {% if resource is not empty %}
+            <hr>
+            <h3>Number of points: {{ resource.count }}</h3>
+            <ul class="list-group">
+                {% for item in resource.items %}
+                    <li class="list-group-item">
+                        - Point {{ loop.index }}: {{ item.name }} {{ item.address.street }} {{ item.address.postCode }} {{ item.address.city }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}
